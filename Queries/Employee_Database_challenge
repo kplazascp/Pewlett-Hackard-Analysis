@@ -1,1 +1,29 @@
+--Retirement_Titles
+SELECT em.emp_no
+       ,em.first_name
+	   ,em.last_name
+	   ,ti.title
+	   ,ti.from_date
+	   ,ti.to_date
+INTO retirement_titles
+FROM employees as em
+LEFT JOIN titles as ti ON em.emp_no = ti.emp_no
+WHERE birth_date >= '1952-01-01' and birth_date < '1956-01-01'
+ORDER BY emp_no;
 
+--Unique_Title
+SELECT DISTINCT ON (emp_no) emp_no,
+	first_name,
+	last_name,
+	title
+INTO unique_titles
+FROM retirement_titles
+WHERE to_date = '9999-01-01'
+ORDER BY emp_no, to_date DESC;
+
+--Retiring_titles
+SELECT DISTINCT title, COUNT(*)
+INTO retiring_titles
+FROM unique_titles
+GROUP BY 1
+ORDER BY 2 DESC;
